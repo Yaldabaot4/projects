@@ -44,7 +44,8 @@ int check_option(char letter, unsigned int count, options option)
         return (letter >= 'a' && letter <= 'z');
     }
     else {
-        return !count;
+        return (letter >= 'A' && letter <= 'Z') && 
+            (count || (letter >= 'a' && letter <= 'z'));
     }
 }
 
@@ -57,29 +58,44 @@ char* capitalize(char* instring, options option)
         exit(1);
     }
     unsigned int i = 0;
-    while (instring[i] != '\n' && check_option(instring[i], i, option)) {
-        res[i] = change_capitalization(instring[i]);
+    while (instring[i] != '\n') {
+        if (check_option(instring[i], i, option)) {
+            res[i] = change_capitalization(instring[i]);
+        }
+        else {
+            res[i] = instring[i];
+        }
         i++;
     }
     res[i] = 0;
     return res;
 }
 
-int main(int argc, char* argv[])
+void gettext(char* input_string)
 {
-    int stayloop = 1;
-    while (stayloop) {
-        printf("Enter your text below:\n");
-        char input_string[100];
-        fgets(input_string, 100, stdin);
-        printf("Select one of the options:\n"
+    printf("Enter your text below:\n");
+    fgets(input_string, 100, stdin);
+}
+
+void getoption(options* input_option)
+{
+    printf("Select one of the options:\n"
             "type 0 to reverse capitalization of every letter\n"
             "type 1 to change all upper case letters to lower case\n"
             "type 2 to change all lower case letters to upper case\n"
             "type 3 to leave the first letter upper cased and change"
             " the rest to lower case\n");
-        options input_option;
-        fscanf(stdin, "%d", &input_option);
+    fscanf(stdin, "%d", input_option);
+}
+
+int main(int argc, char* argv[])
+{
+    int stayloop = 1;
+    char input_string[100];
+    options input_option;
+    while (stayloop) {
+        gettext(input_string);
+        getoption(&input_option);
         char* changed = capitalize(input_string, input_option);
         printf("%s", changed);
         free(changed);
