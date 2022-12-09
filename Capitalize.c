@@ -2,6 +2,14 @@
 #include <stdio.h>
 #include <string.h>
 
+typedef enum options options;
+enum options {
+    CHANGE_ALL,
+    MAKE_ALL_LOWERCASE,
+    MAKE_ALL_UPPERCASE,
+    LEAVE_FIRST_UPPERCASE
+};
+
 unsigned int length(char* string) 
 {
     unsigned int len = 0;
@@ -24,7 +32,23 @@ char change_capitalization(char letter)
     }
 }
 
-char* capitalize(char* instring)
+int check_option(char letter, unsigned int count, options option)
+{
+    if (option == CHANGE_ALL) {
+        return 1;
+    }
+    else if (option == MAKE_ALL_LOWERCASE) {
+        return (letter >= 'A' && letter <= 'Z');
+    }
+    else if (option == MAKE_ALL_UPPERCASE) {
+        return (letter >= 'a' && letter <= 'z');
+    }
+    else {
+        return !count;
+    }
+}
+
+char* capitalize(char* instring, options option)
 {
     unsigned int in_len = length(instring);
     char* res = (char*)malloc(in_len * sizeof(char));
@@ -33,7 +57,7 @@ char* capitalize(char* instring)
         exit(1);
     }
     unsigned int i = 0;
-    while (instring[i] != '\n') {
+    while (instring[i] != '\n' && check_option(instring[i], i, option)) {
         res[i] = change_capitalization(instring[i]);
         i++;
     }
@@ -46,13 +70,20 @@ int main(int argc, char* argv[])
     int stayloop = 1;
     while (stayloop) {
         printf("Enter your text below:\n");
-        char user_input[100];
-        fgets(user_input, 100, stdin);
-        char* changed = capitalize(user_input);
+        char input_string[100];
+        fgets(input_string, 100, stdin);
+        printf("Select one of the options:\n"
+            "type 0 to reverse capitalization of every letter\n"
+            "type 1 to change all upper case letters to lower case\n"
+            "type 2 to change all lower case letters to upper case\n"
+            "type 3 to leave the first letter upper cased and change"
+            " the rest to lower case\n");
+        options input_option;
+        fscanf(stdin, "%d", &input_option);
+        char* changed = capitalize(input_string, input_option);
         printf("%s", changed);
-
-        stayloop = 0;
         free(changed);
+        stayloop = 0;
     }
     return 0;
 }
