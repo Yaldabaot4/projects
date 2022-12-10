@@ -92,14 +92,21 @@ int main(int argc, char* argv[])
 {
     int stayloop = 1;
     char input_string[100];
+    char choice = 'f';
     options input_option;
     while (stayloop) {
         gettext(input_string);
-        getoption(&input_option);
+        if (choice == 'f') {
+            getoption(&input_option);
+        }
         char* changed = capitalize(input_string, input_option);
         printf("%s", changed);
         free(changed);
-        stayloop = 0;
+        printf("\nType q to quit the program or c to continue:\n");
+        fgets(&choice, 1, stdin);
+        if (choice == 'q') {
+            stayloop = 0;
+        }
     }
     return 0;
 }
