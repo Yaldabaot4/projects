@@ -74,8 +74,8 @@ char* capitalize(char* instring, options option)
 void gettext(char* input_string)
 {
     printf("Enter your text below:\n");
+    fflush(stdout);
     fgets(input_string, 100, stdin);
-    fflush(stdin);
 }
 
 void getoption(options* input_option)
@@ -86,8 +86,10 @@ void getoption(options* input_option)
             "type 2 to change all lower case letters to upper case\n"
             "type 3 to leave the first letter upper cased and change"
             " the rest to lower case\n");
-    fscanf(stdin, "%d", input_option);
-    fflush(stdin);
+    fflush(stdout);
+    char input[5];
+    fgets(input, 5, stdin);
+    sscanf(input, "%d\n", input_option);
 }
 
 int main(int argc, char* argv[])
@@ -105,8 +107,10 @@ int main(int argc, char* argv[])
         printf("%s", changed);
         free(changed);
         printf("\nType q to quit the program or c to continue:\n");
-        fgets(&choice, 1, stdin); //fix: buffer stores 2 \n from somewhere and I need to fix that
-        fflush(stdin);
+        fflush(stdout);
+        char input[5];
+        fgets(input, 5, stdin);
+        sscanf(input, "%c\n", &choice);
         if (choice == 'q') {
             stayloop = 0;
         }
