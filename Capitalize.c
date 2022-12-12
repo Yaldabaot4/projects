@@ -75,6 +75,7 @@ void gettext(char* input_string)
 {
     printf("Enter your text below:\n");
     fgets(input_string, 100, stdin);
+    fflush(stdin);
 }
 
 void getoption(options* input_option)
@@ -86,6 +87,7 @@ void getoption(options* input_option)
             "type 3 to leave the first letter upper cased and change"
             " the rest to lower case\n");
     fscanf(stdin, "%d", input_option);
+    fflush(stdin);
 }
 
 int main(int argc, char* argv[])
@@ -103,7 +105,8 @@ int main(int argc, char* argv[])
         printf("%s", changed);
         free(changed);
         printf("\nType q to quit the program or c to continue:\n");
-        fgets(&choice, 1, stdin);
+        fgets(&choice, 1, stdin); //fix: buffer stores 2 \n from somewhere and I need to fix that
+        fflush(stdin);
         if (choice == 'q') {
             stayloop = 0;
         }
