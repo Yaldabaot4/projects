@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <gtk/gtk.h>
 
 typedef enum options options;
 enum options {
@@ -94,10 +95,18 @@ void getoption(options* input_option)
 
 int main(int argc, char* argv[])
 {
+    gtk_init(&argc, &argv);
+
+    g_printf("GTK+ version: %d.%d.%d\n", gtk_major_version,
+        gtk_minor_version, gtk_micro_version);
+    g_printf("Glib version: %d.%d.%d\n", glib_major_version,
+        glib_minor_version, glib_micro_version);
+
     int stayloop = 1;
     char input_string[100];
     char choice = 'f';
     options input_option;
+
     while (stayloop) {
         gettext(input_string);
         if (choice == 'f') {
